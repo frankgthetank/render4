@@ -1,14 +1,13 @@
+import requests
 import geopandas as gpd
+import json
 from dash import Dash, html
 import dash_leaflet as dl
-import json
-import requests
 from io import BytesIO
-
-
 
 # URL del archivo GeoJSON en Google Drive
 GEOJSON_URL = "https://drive.google.com/uc?id=1FLDh0D9UKmHTkzw6asKzfpRFDxSU8wC-&export=download"
+
 
 #https://drive.google.com/file/d/1FLDh0D9UKmHTkzw6asKzfpRFDxSU8wC-/view?usp=sharing
 
@@ -19,25 +18,19 @@ def fetch_geojson(url):
     response = requests.get(url)
     if response.status_code == 200:
         # Cargar el archivo en un GeoDataFrame
-        gdf = gpd.read_file(BytesIO(response.content))
+        gdf = gpd.read_file(BytesIO(response.content),driver='GeoJSON')
         # Convertir a GeoJSON
         return json.loads(gdf.to_json())
     else:
         raise Exception(f"No se pudo descargar el archivo: {response.status_code}")
 
 # Descargar los datos GeoJSON
+geojson_data = fetch_geojson(GEOJSON_URL)
+
+print(geojson_data.getheaders())
 
 
-
-try:
-    geojson_data = fetch_geojson(GEOJSON_URL)
-    print("Capas disponibles:")
-except Exception as e:
-    print("Error al listar capas:", e)
-
-#print(geojson_data.head())
-
-
+"""
 # Crear la aplicación Dash
 app = Dash(__name__)
 
@@ -57,4 +50,7 @@ server = app.server
 if __name__ == "__main__":
     app.run_server(debug=True)
 
-    
+"""
+
+
+

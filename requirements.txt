@@ -1,8 +1,8 @@
 dash
 dash-leaflet
 geopandas
+requests
 gunicorn
+fiona
 shapely
 pyproj
-fiona
-
